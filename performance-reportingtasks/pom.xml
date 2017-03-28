@@ -28,10 +28,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>nifi-reportingtasks.performance-api</module>
-        <module>nifi-reportingtasks.performance-api-nar</module>
-        <module>nifi-reportingtasks.performance</module>
-        <module>nifi-reportingtasks.performance-nar</module>
+        <module>nifi-performance-processors</module>
+        <module>nifi-performance-nar</module>
     </modules>
 
 </project>

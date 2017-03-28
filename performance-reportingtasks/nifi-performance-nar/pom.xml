@@ -17,19 +17,25 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.nifi</groupId>
-        <artifactId>nifi-nar-bundles</artifactId>
+        <groupId>com.github.jdye64</groupId>
+        <artifactId>performance-reportingtasks</artifactId>
         <version>1.1.2</version>
     </parent>
 
-    <groupId>com.github.jdye64</groupId>
-    <artifactId>backpressure-reportingtasks</artifactId>
+    <artifactId>nifi-performance-nar</artifactId>
     <version>1.1.2</version>
-    <packaging>pom</packaging>
+    <packaging>nar</packaging>
+    <properties>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <source.skip>true</source.skip>
+    </properties>
 
-    <modules>
-        <module>nifi-backpressure-processors</module>
-        <module>nifi-backpressure-nar</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.github.jdye64</groupId>
+            <artifactId>nifi-performance-processors</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -8,6 +8,12 @@
     <packaging>pom</packaging>
 
 
+  <!--<modules>-->
+    <!--<module>backpressure-reportingtasks</module>-->
+    <!--<module>performance-reportingtasks</module>-->
+    <!--<module>clusterstate-reportingtasks</module>-->
+    <!--<module>sla-reportingtasks</module>-->
+  <!--</modules>-->
   <modules>
     <module>backpressure-reportingtasks</module>
     <module>performance-reportingtasks</module>

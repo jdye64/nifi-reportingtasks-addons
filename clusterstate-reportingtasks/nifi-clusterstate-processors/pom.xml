@@ -17,19 +17,37 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.nifi</groupId>
-        <artifactId>nifi-nar-bundles</artifactId>
+        <groupId>com.github.jdye64</groupId>
+        <artifactId>clusterstate-reportingtasks</artifactId>
         <version>1.1.2</version>
     </parent>
 
-    <groupId>com.github.jdye64</groupId>
-    <artifactId>backpressure-reportingtasks</artifactId>
-    <version>1.1.2</version>
-    <packaging>pom</packaging>
+    <artifactId>nifi-clusterstate-processors</artifactId>
+    <packaging>jar</packaging>
 
-    <modules>
-        <module>nifi-backpressure-processors</module>
-        <module>nifi-backpressure-nar</module>
-    </modules>
-
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.nifi</groupId>
+            <artifactId>nifi-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.nifi</groupId>
+            <artifactId>nifi-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.nifi</groupId>
+            <artifactId>nifi-mock</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

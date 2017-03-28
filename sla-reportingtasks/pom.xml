@@ -28,10 +28,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>nifi-reportingtasks.sla-api</module>
-        <module>nifi-reportingtasks.sla-api-nar</module>
-        <module>nifi-reportingtasks.sla</module>
-        <module>nifi-reportingtasks.sla-nar</module>
+        <module>nifi-sla-processors</module>
+        <module>nifi-sla-nar</module>
     </modules>
 
 </project>

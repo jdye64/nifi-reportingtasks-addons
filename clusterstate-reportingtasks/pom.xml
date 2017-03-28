@@ -28,10 +28,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>nifi-reportingtasks.clusterstate-api</module>
-        <module>nifi-reportingtasks.clusterstate-api-nar</module>
-        <module>nifi-reportingtasks.clusterstate</module>
-        <module>nifi-reportingtasks.clusterstate-nar</module>
+        <module>nifi-clusterstate-processors</module>
+        <module>nifi-clusterstate-nar</module>
     </modules>
 
 </project>
