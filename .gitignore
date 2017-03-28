@@ -7,3 +7,7 @@ performance-reportingtasks/**/target
 sla-reportingtasks/**/target
 
 backpressure-reportingtasks/nifi-reportingtasks.backpressure-api-nar/target/.plxarc
+
+backpressure-reportingtasks/nifi-backpressure-nar/nifi-backpressure-nar.iml
+
+*.iml
