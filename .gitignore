@@ -1,0 +1,9 @@
+
+.idea
+
+backpressure-reportingtasks/**/target
+clusterstate-reportingtasks/**/target
+performance-reportingtasks/**/target
+sla-reportingtasks/**/target
+
+backpressure-reportingtasks/nifi-reportingtasks.backpressure-api-nar/target/.plxarc
