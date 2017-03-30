@@ -11,3 +11,4 @@ backpressure-reportingtasks/nifi-reportingtasks.backpressure-api-nar/target/.plx
 backpressure-reportingtasks/nifi-backpressure-nar/nifi-backpressure-nar.iml
 
 *.iml
+/nifi-reportingtasks-addons.iml
