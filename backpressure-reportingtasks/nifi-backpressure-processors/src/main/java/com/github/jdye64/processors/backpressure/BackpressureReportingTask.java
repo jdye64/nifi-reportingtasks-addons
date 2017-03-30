@@ -47,8 +47,6 @@ public class BackpressureReportingTask
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    private List<PropertyDescriptor> descriptors;
-
     @Override
     protected List<PropertyDescriptor> getSupportedPropertyDescriptors() {
         final List<PropertyDescriptor> properties = new ArrayList<>();
@@ -57,7 +55,6 @@ public class BackpressureReportingTask
     }
 
     public void onTrigger(ReportingContext reportingContext) {
-        getLogger().info("Running BackpressureReportingTask");
 
         List<ConnectionStatus> pressuredConnections = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
@@ -73,11 +70,10 @@ public class BackpressureReportingTask
             }
         }
 
-        //Write the pressured connections to some sort of application?? REST, JMS, Log, etc
         try {
-            getLogger().info("Pressured Connections: {}", new Object[]{mapper.writeValueAsString(pressuredConnections)});
+            getLogger().info("{}", new Object[]{mapper.writeValueAsString(pressuredConnections)});
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            getLogger().error("Error Processing pressured connections JSON: {}", new Object[]{e.getMessage()}, e);
         }
     }
 
