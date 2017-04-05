@@ -7,17 +7,16 @@
     <version>1.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <properties>
+        <nifi.version>1.2.0-SNAPSHOT</nifi.version>
+    </properties>
 
-  <!--<modules>-->
-    <!--<module>backpressure-reportingtasks</module>-->
-    <!--<module>performance-reportingtasks</module>-->
-    <!--<module>clusterstate-reportingtasks</module>-->
-    <!--<module>sla-reportingtasks</module>-->
-  <!--</modules>-->
-  <modules>
-    <module>backpressure-reportingtasks</module>
-    <module>performance-reportingtasks</module>
-    <module>clusterstate-reportingtasks</module>
-    <module>sla-reportingtasks</module>
-  </modules>
+    <modules>
+        <module>backpressure-reportingtasks</module>
+        <module>performance-reportingtasks</module>
+        <module>clusterstate-reportingtasks</module>
+        <module>sla-reportingtasks</module>
+        <module>abstract-reportingtasks</module>
+    </modules>
+
 </project>
