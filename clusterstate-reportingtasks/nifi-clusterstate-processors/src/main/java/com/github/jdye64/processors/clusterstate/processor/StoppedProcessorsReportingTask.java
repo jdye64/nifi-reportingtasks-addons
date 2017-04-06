@@ -1,20 +1,17 @@
-package com.github.jdye64.processors.clusterstate;
+package com.github.jdye64.processors.clusterstate.processor;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.components.PropertyDescriptor;
-import org.apache.nifi.controller.status.ProcessGroupStatus;
 import org.apache.nifi.controller.status.ProcessorStatus;
 import org.apache.nifi.controller.status.RunStatus;
 import org.apache.nifi.reporting.ReportingContext;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.jdye64.reportingtasks.AbstractDeviceRegistryReportingTask;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -36,10 +33,10 @@ import com.github.jdye64.reportingtasks.AbstractDeviceRegistryReportingTask;
  */
 
 
-@Tags({"running", "processor"})
-@CapabilityDescription("Searches the designated process group for processors that are considered to be in the 'running' state")
-public class RunningProcessorsReportingTask
-    extends AbstractDeviceRegistryReportingTask {
+@Tags({"invalid", "configuration", "processor"})
+@CapabilityDescription("Searches the designated process group for processors that are considered to be in the 'invalid' configuration state")
+public class StoppedProcessorsReportingTask
+    extends AbstractProcessorStateReportingTask {
 
     public final List<PropertyDescriptor> getSupportedPropertyDescriptors() {
         final List<PropertyDescriptor> descriptors = super.getSupportedPropertyDescriptors();
@@ -49,26 +46,20 @@ public class RunningProcessorsReportingTask
     @Override
     public void onTrigger(ReportingContext reportingContext) {
 
-        List<ProcessorStatus> runningProcessors = new ArrayList<>();
+        List<ProcessorStatus> stoppedProcessors = new ArrayList<>();
 
-        ProcessGroupStatus status = reportingContext.getEventAccess().getControllerStatus();
-        Iterator<ProcessorStatus> itr = status.getProcessorStatus().iterator();
-        while (itr.hasNext()) {
-            ProcessorStatus ps = itr.next();
-            if (ps.getRunStatus().compareTo(RunStatus.Running) == 0) {
-                runningProcessors.add(ps);
-            }
-        }
+        //Recursively adds all process group pressured nested connections
+        stoppedProcessors.addAll(recursiveProcessorLocate(reportingContext.getEventAccess().getControllerStatus(), RunStatus.Stopped));
 
         try {
-            getLogger().info("{}", new Object[]{mapper.writeValueAsString(runningProcessors)});
+            getLogger().info("{}", new Object[]{mapper.writeValueAsString(stoppedProcessors)});
 
             if (reportingContext.getProperty(REST_POSTING_ENABLED).asBoolean()) {
-                reportToDeviceRegistry(reportingContext, "/processors/running", mapper.writeValueAsString(runningProcessors));
+                reportToDeviceRegistry(reportingContext, "/processors/stopped", mapper.writeValueAsString(stoppedProcessors));
             }
 
         } catch (JsonProcessingException e) {
-            getLogger().error("Error Processing running processors JSON: {}", new Object[]{e.getMessage()}, e);
+            getLogger().error("Error Processing stopped processors JSON: {}", new Object[]{e.getMessage()}, e);
         }
 
     }

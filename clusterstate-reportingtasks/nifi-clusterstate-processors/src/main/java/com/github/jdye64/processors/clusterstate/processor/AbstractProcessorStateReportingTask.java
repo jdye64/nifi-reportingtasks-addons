@@ -1,16 +1,13 @@
-package com.github.jdye64.processors.clusterstate;
+package com.github.jdye64.processors.clusterstate.processor;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.controller.status.ProcessGroupStatus;
 import org.apache.nifi.controller.status.ProcessorStatus;
-import org.apache.nifi.reporting.ReportingContext;
+import org.apache.nifi.controller.status.RunStatus;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.jdye64.reportingtasks.AbstractDeviceRegistryReportingTask;
 
 /**
@@ -29,39 +26,39 @@ import com.github.jdye64.reportingtasks.AbstractDeviceRegistryReportingTask;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * <p>
- * Created on 4/5/17.
+ * Created on 4/6/17.
  */
 
 
-public class ProcessorsReportingTask
+public abstract class AbstractProcessorStateReportingTask
     extends AbstractDeviceRegistryReportingTask {
 
-    public final List<PropertyDescriptor> getSupportedPropertyDescriptors() {
-        final List<PropertyDescriptor> descriptors = super.getSupportedPropertyDescriptors();
-        return Collections.unmodifiableList(descriptors);
-    }
-
-    @Override
-    public void onTrigger(ReportingContext reportingContext) {
+    protected List<ProcessorStatus> recursiveProcessorLocate(ProcessGroupStatus status, RunStatus runStatus) {
 
         List<ProcessorStatus> processors = new ArrayList<>();
 
-        ProcessGroupStatus status = reportingContext.getEventAccess().getControllerStatus();
         Iterator<ProcessorStatus> itr = status.getProcessorStatus().iterator();
         while (itr.hasNext()) {
-            processors.add(itr.next());
-        }
-
-        try {
-            getLogger().info("{}", new Object[]{mapper.writeValueAsString(processors)});
-
-            if (reportingContext.getProperty(REST_POSTING_ENABLED).asBoolean()) {
-                reportToDeviceRegistry(reportingContext, "/processors/status", mapper.writeValueAsString(processors));
+            ProcessorStatus ps = itr.next();
+            if (runStatus == null) {
+                //Add all
+                processors.add(ps);
+            } else {
+                if (ps.getRunStatus().compareTo(runStatus) == 0) {
+                    processors.add(ps);
+                }
             }
-
-        } catch (JsonProcessingException e) {
-            getLogger().error("Error Processing processors status JSON: {}", new Object[]{e.getMessage()}, e);
         }
 
+        //Loop through all of the process groups and add their connection status
+        Iterator<ProcessGroupStatus> pgitr = status.getProcessGroupStatus().iterator();
+        while (pgitr.hasNext()) {
+            ProcessGroupStatus pgs = pgitr.next();
+
+            //recursive call
+            processors.addAll(recursiveProcessorLocate(pgs, runStatus));
+        }
+
+        return processors;
     }
 }

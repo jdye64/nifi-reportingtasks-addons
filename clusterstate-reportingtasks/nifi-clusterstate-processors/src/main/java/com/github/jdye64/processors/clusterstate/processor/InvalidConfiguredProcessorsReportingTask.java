@@ -14,28 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jdye64.processors.clusterstate;
+package com.github.jdye64.processors.clusterstate.processor;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.components.PropertyDescriptor;
-import org.apache.nifi.controller.status.ProcessGroupStatus;
 import org.apache.nifi.controller.status.ProcessorStatus;
 import org.apache.nifi.controller.status.RunStatus;
 import org.apache.nifi.reporting.ReportingContext;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.jdye64.reportingtasks.AbstractDeviceRegistryReportingTask;
 
 @Tags({"invalid", "configuration", "processor"})
 @CapabilityDescription("Searches the designated process group for processors that are considered to be in the 'invalid' configuration state")
 public class InvalidConfiguredProcessorsReportingTask
-        extends AbstractDeviceRegistryReportingTask {
+        extends AbstractProcessorStateReportingTask {
 
     public final List<PropertyDescriptor> getSupportedPropertyDescriptors() {
         final List<PropertyDescriptor> descriptors = super.getSupportedPropertyDescriptors();
@@ -47,14 +44,8 @@ public class InvalidConfiguredProcessorsReportingTask
 
         List<ProcessorStatus> invalidProcessors = new ArrayList<>();
 
-        ProcessGroupStatus status = reportingContext.getEventAccess().getControllerStatus();
-        Iterator<ProcessorStatus> itr = status.getProcessorStatus().iterator();
-        while (itr.hasNext()) {
-            ProcessorStatus ps = itr.next();
-            if (ps.getRunStatus().compareTo(RunStatus.Invalid) == 0) {
-                invalidProcessors.add(ps);
-            }
-        }
+        //Recursively adds all process group pressured nested connections
+        invalidProcessors.addAll(recursiveProcessorLocate(reportingContext.getEventAccess().getControllerStatus(), RunStatus.Invalid));
 
         try {
             getLogger().info("{}", new Object[]{mapper.writeValueAsString(invalidProcessors)});
