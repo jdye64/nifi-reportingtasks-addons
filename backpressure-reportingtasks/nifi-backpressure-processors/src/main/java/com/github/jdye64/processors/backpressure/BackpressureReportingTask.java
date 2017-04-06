@@ -74,23 +74,6 @@ public class BackpressureReportingTask
             pressuredConnections.addAll(recursiveConnectionStatusAdd(pgs, bpCount));
         }
 
-
-
-//
-//
-//
-//        Iterator<ProcessGroupStatus> pgitr = status.getProcessGroupStatus().iterator();
-//        while (pgitr.hasNext()) {
-//            ProcessGroupStatus pgs = pgitr.next();
-//            itr = pgs.getConnectionStatus().iterator();
-//            while (itr.hasNext()) {
-//                ConnectionStatus cs = itr.next();
-//                if (cs.getBackPressureObjectThreshold() > bpCount.intValue()) {
-//                    pressuredConnections.add(cs);
-//                }
-//            }
-//        }
-
         return pressuredConnections;
     }
 
@@ -100,19 +83,7 @@ public class BackpressureReportingTask
 
         Integer bpCount = new Integer(reportingContext.getProperty(BACKPRESSURE_OBJECT_SIZE_THRESHOLD).evaluateAttributeExpressions().getValue());
 
-        //ProcessGroupStatus status = reportingContext.getEventAccess().getControllerStatus();
-
-//        //Get the ROOT ProcessGroup connection statuses
-//        Iterator<ConnectionStatus> itr = status.getConnectionStatus().iterator();
-//        while (itr.hasNext()) {
-//            ConnectionStatus cs = itr.next();
-//            if (cs.getBackPressureObjectThreshold() > bpCount.intValue()) {
-//                pressuredConnections.add(cs);
-//            }
-//        }
-
         //Recursively adds all process group pressured nested connections
-        //List<ConnectionStatus> pgPressuredConnections = recursiveConnectionStatusAdd(status, bpCount);
         pressuredConnections.addAll(recursiveConnectionStatusAdd(reportingContext.getEventAccess().getControllerStatus(), bpCount));
 
         try {
