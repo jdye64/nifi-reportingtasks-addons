@@ -17,6 +17,7 @@
         <module>clusterstate-reportingtasks</module>
         <module>sla-reportingtasks</module>
         <module>abstract-reportingtasks</module>
-    </modules>
+        <module>provenance-reportingtasks</module>
+  </modules>
 
 </project>

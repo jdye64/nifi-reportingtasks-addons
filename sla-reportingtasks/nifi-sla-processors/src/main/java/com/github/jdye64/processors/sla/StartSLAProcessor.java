@@ -6,11 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.nifi.annotation.behavior.WritesAttribute;
+import org.apache.nifi.annotation.behavior.WritesAttributes;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.SeeAlso;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.components.PropertyDescriptor;
-import org.apache.nifi.distributed.cache.client.DistributedMapCacheClient;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.processor.AbstractProcessor;
 import org.apache.nifi.processor.ProcessContext;
@@ -18,7 +19,6 @@ import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.exception.ProcessException;
-import org.apache.nifi.processor.util.StandardValidators;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -42,36 +42,16 @@ import org.apache.nifi.processor.util.StandardValidators;
 @Tags({"start", "SLA"})
 @CapabilityDescription("When invoked will trigger the start of an SLA measurement. That measurement will be persisted in the SLAControllerService" +
         " and remain in the 'RUNNING' state until the StopSLAProcessor is called")
+@WritesAttributes(
+        @WritesAttribute(attribute="sla.start.timestamp", description="System current Linux epoch timestamp when this processor was invoked.")
+)
 @SeeAlso({StopSLAProcessor.class})
 public class StartSLAProcessor
         extends AbstractProcessor {
 
-    static final PropertyDescriptor CACHE_SERVER = new PropertyDescriptor.Builder()
-            .name("SLA Cache Server")
-            .description("Specifies the DistributedMapCacheClient that will be used in conjunction with a DistributedMapCacheServer to" +
-                    " keep track of system SLAs")
-            .identifiesControllerService(DistributedMapCacheClient.class)
-            .required(true)
-            .build();
-
-    static final PropertyDescriptor SLA_KEY = new PropertyDescriptor.Builder()
-            .name("SLA Key")
-            .description("Designates the 'key' that should be used to identify this flowfile for a SLA. You may use any value or expression language technique" +
-                    " you please to do this. Please ensure that you key is of the proper granularity to ensure that SLAs are properly calculated. For example" +
-                    " if you want to mark an SLA for every flowfile using '${uuid}' which will use the NiFi frameworks flowfile id as the key.")
-            .expressionLanguageSupported(true)
-            .required(true)
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .build();
-
     public static final Relationship REL_SUCCESS = new Relationship.Builder()
             .name("success")
             .description("successfully started SLA window")
-            .build();
-
-    public static final Relationship REL_FAILURE = new Relationship.Builder()
-            .name("failure")
-            .description("failed to start SLA window")
             .build();
 
     private List<PropertyDescriptor> descriptors;
@@ -81,13 +61,10 @@ public class StartSLAProcessor
     @Override
     protected void init(final ProcessorInitializationContext context) {
         final List<PropertyDescriptor> descriptors = new ArrayList<>();
-        descriptors.add(CACHE_SERVER);
-        descriptors.add(SLA_KEY);
         this.descriptors = Collections.unmodifiableList(descriptors);
 
         final Set<Relationship> relationships = new HashSet<>();
         relationships.add(REL_SUCCESS);
-        relationships.add(REL_FAILURE);
         this.relationships = Collections.unmodifiableSet(relationships);
     }
 
@@ -108,30 +85,7 @@ public class StartSLAProcessor
             return;
         }
 
-        final DistributedMapCacheClient cacheServer = context.getProperty(CACHE_SERVER).asControllerService(DistributedMapCacheClient.class);
-        String key = context.getProperty(SLA_KEY).evaluateAttributeExpressions(flowFile).getValue();
-
-        //Place the SLA start entry in the cacheserver
-        //cacheServer.putIfAbsent()
-
-
-//        try {
-//            StringBuffer strBuffer = new StringBuffer();
-//            strBuffer.append(flowFile.getAttribute("absolute.path"));
-//            strBuffer.append(flowFile.getAttribute("filename"));
-//
-//            getLogger().debug("Deleting File: " + strBuffer.toString());
-//
-//            File f = new File(strBuffer.toString());
-//            if (f.delete()) {
-//                session.transfer(flowFile, REL_SUCCESS);
-//            } else {
-//                session.transfer(flowFile, REL_FAILURE);
-//            }
-//
-//        } catch (Exception ex) {
-//            getLogger().error(ex.getMessage());
-//            session.transfer(flowFile, REL_FAILURE);
-//        }
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        session.transfer(session.putAttribute(flowFile, "sla.start.timestamp", timestamp), REL_SUCCESS);
     }
 }
