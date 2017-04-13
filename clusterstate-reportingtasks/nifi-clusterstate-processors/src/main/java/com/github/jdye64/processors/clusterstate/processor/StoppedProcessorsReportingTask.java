@@ -55,7 +55,7 @@ public class StoppedProcessorsReportingTask
             getLogger().info("{}", new Object[]{mapper.writeValueAsString(stoppedProcessors)});
 
             if (reportingContext.getProperty(REST_POSTING_ENABLED).asBoolean()) {
-                reportToDeviceRegistry(reportingContext, "/processors/stopped", mapper.writeValueAsString(stoppedProcessors));
+                reportToDeviceRegistry(reportingContext, "/api/v1/processors/stopped", mapper.writeValueAsString(stoppedProcessors));
             }
 
         } catch (JsonProcessingException e) {

@@ -51,7 +51,7 @@ public class InvalidConfiguredProcessorsReportingTask
             getLogger().info("{}", new Object[]{mapper.writeValueAsString(invalidProcessors)});
 
             if (reportingContext.getProperty(REST_POSTING_ENABLED).asBoolean()) {
-                reportToDeviceRegistry(reportingContext, "/processors/invalid", mapper.writeValueAsString(invalidProcessors));
+                reportToDeviceRegistry(reportingContext, "/api/v1/processors/invalid", mapper.writeValueAsString(invalidProcessors));
             }
 
         } catch (JsonProcessingException e) {

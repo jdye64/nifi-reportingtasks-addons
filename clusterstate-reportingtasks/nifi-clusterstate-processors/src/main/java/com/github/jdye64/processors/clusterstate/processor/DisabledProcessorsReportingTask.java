@@ -55,7 +55,7 @@ public class DisabledProcessorsReportingTask
             getLogger().info("{}", new Object[]{mapper.writeValueAsString(disabledProcessors)});
 
             if (reportingContext.getProperty(REST_POSTING_ENABLED).asBoolean()) {
-                reportToDeviceRegistry(reportingContext, "/processors/disabled", mapper.writeValueAsString(disabledProcessors));
+                reportToDeviceRegistry(reportingContext, "/api/v1/processors/disabled", mapper.writeValueAsString(disabledProcessors));
             }
 
         } catch (JsonProcessingException e) {

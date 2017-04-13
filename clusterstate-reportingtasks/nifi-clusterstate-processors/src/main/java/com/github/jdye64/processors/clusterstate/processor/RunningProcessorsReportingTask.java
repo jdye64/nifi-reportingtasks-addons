@@ -55,7 +55,7 @@ public class RunningProcessorsReportingTask
             getLogger().info("{}", new Object[]{mapper.writeValueAsString(runningProcessors)});
 
             if (reportingContext.getProperty(REST_POSTING_ENABLED).asBoolean()) {
-                reportToDeviceRegistry(reportingContext, "/processors/running", mapper.writeValueAsString(runningProcessors));
+                reportToDeviceRegistry(reportingContext, "/api/v1/processors/running", mapper.writeValueAsString(runningProcessors));
             }
 
         } catch (JsonProcessingException e) {
