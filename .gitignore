@@ -5,9 +5,11 @@ backpressure-reportingtasks/**/target
 clusterstate-reportingtasks/**/target
 performance-reportingtasks/**/target
 sla-reportingtasks/**/target
-abstract-reportingtasks/target
+provenance-reportingtasks/**/target
+abstract-reportingtasks/**/target
 
 backpressure-reportingtasks/nifi-backpressure-nar/nifi-backpressure-nar.iml
 
 *.iml
+*.DS_STORE
 /nifi-reportingtasks-addons.iml
