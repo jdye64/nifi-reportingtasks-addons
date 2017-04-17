@@ -28,4 +28,49 @@ like the following at the end of the file.
     <logger name="com.github.jdye64.processors.backpressure.BackpressureReportingTask" level="INFO" additivity="false">
         <appender-ref ref="BACKPRESSURE_FILE"/>
     </logger>
+
+    <appender name="DISABLED_PROCESSORS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${org.apache.nifi.bootstrap.config.log.dir}/backpressured-connections.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${org.apache.nifi.bootstrap.config.log.dir}/disabled-processors_%d.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%date %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.github.jdye64.processors.clusterstate.processor.DisabledProcessorsReportingTask" level="INFO" additivity="false">
+        <appender-ref ref="DISABLED_PROCESSORS_FILE"/>
+    </logger>
+
+    <appender name="STOPPED_PROCESSORS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${org.apache.nifi.bootstrap.config.log.dir}/backpressured-connections.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${org.apache.nifi.bootstrap.config.log.dir}/stopped-processors_%d.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%date %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.github.jdye64.processors.clusterstate.processor.StoppedProcessorsReportingTask" level="INFO" additivity="false">
+        <appender-ref ref="STOPPED_PROCESSORS_FILE"/>
+    </logger>
+
+    <appender name="INVALID_PROCESSORS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${org.apache.nifi.bootstrap.config.log.dir}/backpressured-connections.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${org.apache.nifi.bootstrap.config.log.dir}/invalid-processors_%d.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%date %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.github.jdye64.processors.clusterstate.processor.InvalidProcessorsReportingTask" level="INFO" additivity="false">
+        <appender-ref ref="INVALID_PROCESSORS_FILE"/>
+    </logger>
 ```
