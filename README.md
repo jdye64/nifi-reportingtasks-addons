@@ -45,7 +45,7 @@ like the following at the end of the file.
     </logger>
 
     <appender name="STOPPED_PROCESSORS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${org.apache.nifi.bootstrap.config.log.dir}/disabled-processors.log</file>
+        <file>${org.apache.nifi.bootstrap.config.log.dir}/stopped-processors.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${org.apache.nifi.bootstrap.config.log.dir}/stopped-processors_%d.log</fileNamePattern>
             <maxHistory>30</maxHistory>
@@ -60,7 +60,7 @@ like the following at the end of the file.
     </logger>
 
     <appender name="INVALID_PROCESSORS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${org.apache.nifi.bootstrap.config.log.dir}/disabled-processors.log</file>
+        <file>${org.apache.nifi.bootstrap.config.log.dir}/invalid-processors.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${org.apache.nifi.bootstrap.config.log.dir}/invalid-processors_%d.log</fileNamePattern>
             <maxHistory>30</maxHistory>
