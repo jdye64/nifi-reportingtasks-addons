@@ -5,7 +5,7 @@
     <parent>
         <artifactId>nifi-reportingtasks-addons</artifactId>
         <groupId>com.github.jdye64</groupId>
-        <version>1.2.0-SNAPSHOT</version>
+        <version>1.4.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
